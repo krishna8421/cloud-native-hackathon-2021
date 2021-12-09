@@ -1,6 +1,6 @@
 ## Day 1
 
-Fri 10 Dec 3:09 AM
+@ Fri 10 Dec 3:09 AM
 
 Watching the videos of the Cloud Native Hackathon 2021.
 
@@ -18,4 +18,16 @@ Datree
 Teleport
 
 Devtron
+
+
+@ Fri 10 Dec 4:21 AM
+
+Watched the Playlist, Got some awesome new tools to use in the future.
+
+Current Thoughts:
+- Make a Nest.js app 
+- Setup Chakra UI, Cypress and Kube files 
+- Implement auth with JWT?, Twilio to send OTP.
+
+Watch Videos on Kubernetes.
 
