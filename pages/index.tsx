@@ -1,13 +1,19 @@
-import { Box } from '@chakra-ui/react'
-import type { NextPage } from 'next'
-
+import { Box, Flex, Button, Text } from "@chakra-ui/react";
+import type { NextPage } from "next";
+import { useState } from "react";
+import NoLogin from "../components/noLogin";
 
 const Home: NextPage = () => {
-  return (
-    <Box>
-      
-    </Box>
-  )
-}
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const session = localStorage.getItem("jwt-token")
 
-export default Home
+  console.log(session);
+  
+
+  if (!isLogin) {
+    return <NoLogin />;
+  }
+  return <Box>LOGIN</Box>;
+};
+
+export default Home;
