@@ -7,7 +7,6 @@ export default async function VerifyOtp(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-
   const jwt_secret = process.env.JWT_SECRET;
   await mongoDB();
   if (req.method === "GET") {
@@ -49,7 +48,6 @@ export default async function VerifyOtp(
 
     if (parseInt(otp, 10) === userOtp) {
       try {
-
         const updated = await User.updateOne(
           { username },
           { $set: { verified: true } }

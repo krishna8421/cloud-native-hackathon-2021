@@ -1,8 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NoLogin from "../components/noLogin";
-import { useEffect } from "react";
 import jwt from "jsonwebtoken";
 
 const Home: NextPage = () => {
@@ -11,7 +10,6 @@ const Home: NextPage = () => {
     throw new Error("JWT_SECRET is not defined");
   }
   const [isLogin, setIsLogin] = useState<boolean>(false);
-  const [sessionToken, setSessionToken] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [number, setNumber] = useState<string>("");
 
@@ -23,9 +21,8 @@ const Home: NextPage = () => {
       const { username, number } = decoded;
       if (number !== null || true || number !== "") {
         setUsername(username);
-        setNumber((number) => number);
+        setNumber(number);
         setIsLogin(true);
-        setSessionToken(sessionToken);
       }
     }
   }, []);
@@ -33,7 +30,11 @@ const Home: NextPage = () => {
   if (!isLogin) {
     return <NoLogin />;
   }
-  return <Box>{sessionToken}</Box>;
+  return (
+    <Box>
+      Welcome {username} your number is {number}
+    </Box>
+  );
 };
 
 export default Home;

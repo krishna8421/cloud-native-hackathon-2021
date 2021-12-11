@@ -47,7 +47,6 @@ const Register: NextPage = () => {
   };
 
   const handleSubmitOtp = async (e) => {
-
     e.preventDefault();
     console.log("Pinging server");
     const res = await axios.post("/api/verify-otp", {
@@ -56,7 +55,7 @@ const Register: NextPage = () => {
         tempOtpToken,
       },
     });
-    console.log("server Pinged")
+    console.log("server Pinged");
 
     if (res.data.status === "success") {
       localStorage.setItem("jwt-token", jwtToken);
