@@ -6,10 +6,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider>
       <Head>
-        <title>CNH Chat App</title>
+        <title>SMS AUTH</title>
         <meta
           name="description"
-          content="Cloud Native Hackathon 2021 Project"
+          content="Sms Auth with Twilio API"
         />
       </Head>
       <Component {...pageProps} />
