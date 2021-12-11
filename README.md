@@ -1,4 +1,4 @@
-# OTP AUTH
+# SMS AUTH
 
 ## TODO
 
