@@ -1,5 +1,5 @@
 {
-  "name": "cloud-native-hackathon-2021",
+  "name": "smsAuth",
   "private": true,
   "scripts": {
     "dev": "next dev",
