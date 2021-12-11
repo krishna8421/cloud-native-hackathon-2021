@@ -16,6 +16,7 @@ import {
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { resolveAny } from "dns";
 
 const Register: NextPage = () => {
   const [show, setShow] = useState(false);
@@ -29,11 +30,9 @@ const Register: NextPage = () => {
   const [userOtp, setUserOtp] = useState("");
   const router = useRouter();
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const res = await axios("/api/register", {
-      method: "POST",
+    const res = await axios.post("/api/register", {
       data: {
         username,
         password,
@@ -41,7 +40,7 @@ const Register: NextPage = () => {
       },
     });
 
-    
+    console.log(res);
     if (res.data.status === "success") {
       setJwtToken(res.data.token);
       setRequiredOtp(true);
@@ -49,7 +48,7 @@ const Register: NextPage = () => {
     }
   };
 
-  const handleSubmitOtp = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitOtp = async (e) => {
     e.preventDefault();
     const res = await axios("/api/verify-otp", {
       method: "POST",
@@ -57,10 +56,13 @@ const Register: NextPage = () => {
         userOtp,
         tempOtpToken,
       },
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
     if (res.data.status === "success") {
       localStorage.setItem("jwt-token", jwtToken);
-      router.push("/");
+      await router.push("/");
     }
   };
 
@@ -79,6 +81,7 @@ const Register: NextPage = () => {
                 <PinInput
                   otp
                   mask
+                  // @ts-ignore
                   onChange={(event) => setUserOtp(parseInt(event, 10))}
                 >
                   <PinInputField />
@@ -126,7 +129,7 @@ const Register: NextPage = () => {
             <FormLabel mt={5}>Number</FormLabel>
             <Input
               placeholder="Number"
-              id="nummber"
+              id="number"
               onChange={(event) => setNumber(event.currentTarget.value)}
             />
             <Text fontSize="xs" color="gray.500">

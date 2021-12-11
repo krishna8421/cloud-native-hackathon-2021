@@ -12,22 +12,30 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 const Login: NextPage = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios("/api/login", {
+    const res = await axios("/api/login", {
       method: "POST",
       data: {
         username,
         password,
       },
     });
+    if (res.data.status === "success") {
+      localStorage.setItem("jwt-token", res.data.token);
+      await router.push("/");
+    }
   };
+
   return (
     <AuthLayout>
       <Flex w={"100%"} position={"absolute"}>

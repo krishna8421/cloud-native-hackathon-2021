@@ -21,50 +21,53 @@ export default async function VerifyOtp(
 
     const { userOtp, tempOtpToken } = req.body;
 
-
     if (!userOtp || !tempOtpToken) {
       res.status(400).json({
         status: "error",
         error: "OTP not found",
       });
     }
-    let decoded;
 
-    try {
-      decoded = jwt.verify(tempOtpToken, jwt_secret);
-      
-    } catch (e) {
+    let decoded: any;
+
+    if (!jwt_secret) {
       res.status(400).json({
         status: "error",
-        error: "Invalid Token",
+        error: "JWT Secret not found",
       });
+    } else {
+      try {
+        decoded = jwt.verify(tempOtpToken, jwt_secret);
+      } catch (e) {
+        res.status(400).json({
+          status: "error",
+          error: "Invalid Token",
+        });
+      }
     }
+
     const { otp, username } = decoded;
 
+    if (parseInt(otp, 10) === userOtp) {
+      try {
+        const updated = await User.updateOne(
+          { username },
+          { $set: { otpVerified: true } }
+        );
 
-    if(parseInt(otp,10) === userOtp){
-      try{
-        const updated = await User.updateOne({username},{
-          $set:{
-            verified : true
-          }
-        })
-
-        if(updated.modifiedCount===1){
+        if (updated.modifiedCount === 1) {
           res.status(200).json({
             status: "success",
             data: "OTP Verified",
           });
         }
-      }catch(err){
+      } catch (err) {
         res.status(400).json({
           status: "error",
           error: "User not found",
         });
       }
-
-      
-    }else{
+    } else {
       res.status(400).json({
         status: "error",
         error: "OTP not matched",

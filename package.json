@@ -19,11 +19,13 @@
     "mongoose": "^6.1.1",
     "next": "12.0.7",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "twilio": "^3.71.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/jsonwebtoken": "^8.5.6",
+    "@types/mongoose": "^5.11.97",
     "@types/node": "16.11.12",
     "@types/react": "17.0.37",
     "cypress": "^9.1.1",
@@ -32,7 +34,6 @@
     "eslint-config-prettier": "^8.3.0",
     "husky": "^7.0.4",
     "prettier": "^2.5.1",
-    "twilio": "^3.71.3",
     "typescript": "4.5.3"
   }
 }

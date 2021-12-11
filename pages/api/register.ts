@@ -17,9 +17,9 @@ const generateOTP = () => {
   return OTP;
 };
 
-const sendOtp = async (res, number) => {
+const sendOtp = async (res: NextApiResponse, number: string) => {
   res.setHeader("Content-Type", "application/json");
-  const destinationNumber = await number;
+  const destinationNumber = number;
   const otp = generateOTP();
   const messageConfig = {
     body: "OTP For CNH : " + otp,
@@ -33,38 +33,51 @@ const sendOtp = async (res, number) => {
       status: "error",
       error: "Server ERR, Cannot Send Msg at this time.",
     });
+    return;
   }
   return otp;
 };
 
-const saveToDB = async (username, number, password, res) => {
+const saveToDB = async (
+  username: string,
+  number: string,
+  password: string,
+  res: NextApiResponse
+) => {
   const jwt_secret = process.env.JWT_SECRET;
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(password, salt);
   const newUser = new User({ username, password: hashedPassword, number });
-  
 
-  newUser
-    .save()
-    .then(async () => {
-      const otp = await sendOtp(res, number);
-      res.status(200).json({
-        status: "success",
-        error: null,
-        token: jwt.sign({ username, number }, jwt_secret, {
-          expiresIn: "2d",
-        }),
-        otp_token: jwt.sign({ otp, username }, jwt_secret, {
-          expiresIn: "15m",
-        }),
-      });
-    })
-    .catch((err) => {
-      res.status(400).json({
-        status: "error",
-        error: err,
-      });
+  if (!jwt_secret) {
+    res.status(500).json({
+      status: "error",
+      error: "Server ERR, JWT Secret not found.",
     });
+    return;
+  } else {
+    newUser
+      .save()
+      .then(async () => {
+        const otp = await sendOtp(res, number);
+        res.status(200).json({
+          status: "success",
+          error: null,
+          token: jwt.sign({ username, number }, jwt_secret, {
+            expiresIn: "2d",
+          }),
+          otp_token: jwt.sign({ otp, username }, jwt_secret, {
+            expiresIn: "15m",
+          }),
+        });
+      })
+      .catch((err: any) => {
+        res.status(400).json({
+          status: "error",
+          error: err,
+        });
+      });
+  }
 };
 
 export default async function register(
@@ -80,18 +93,18 @@ export default async function register(
         status: "error",
         error: "No Data Found",
       });
+      return;
     }
     const { username, number, password } = req.body;
-
 
     if (!username || !number || !password) {
       res.status(400).json({
         status: "error",
         error: "Please fill all the fields",
       });
+      return;
     }
 
-    
     await User.findOne({ username })
       .then((userExists) => {
         if (userExists) {
