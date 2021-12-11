@@ -39,8 +39,6 @@ const Register: NextPage = () => {
         number,
       },
     });
-
-    console.log(res);
     if (res.data.status === "success") {
       setJwtToken(res.data.token);
       setRequiredOtp(true);
@@ -49,17 +47,17 @@ const Register: NextPage = () => {
   };
 
   const handleSubmitOtp = async (e) => {
+
     e.preventDefault();
-    const res = await axios("/api/verify-otp", {
-      method: "POST",
+    console.log("Pinging server");
+    const res = await axios.post("/api/verify-otp", {
       data: {
         userOtp,
         tempOtpToken,
       },
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
+    console.log("server Pinged")
+
     if (res.data.status === "success") {
       localStorage.setItem("jwt-token", jwtToken);
       await router.push("/");

@@ -7,6 +7,7 @@ export default async function VerifyOtp(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+
   const jwt_secret = process.env.JWT_SECRET;
   await mongoDB();
   if (req.method === "GET") {
@@ -19,15 +20,13 @@ export default async function VerifyOtp(
       });
     }
 
-    const { userOtp, tempOtpToken } = req.body;
-
+    const { userOtp, tempOtpToken } = req.body.data;
     if (!userOtp || !tempOtpToken) {
       res.status(400).json({
         status: "error",
         error: "OTP not found",
       });
     }
-
     let decoded: any;
 
     if (!jwt_secret) {
@@ -50,9 +49,10 @@ export default async function VerifyOtp(
 
     if (parseInt(otp, 10) === userOtp) {
       try {
+
         const updated = await User.updateOne(
           { username },
-          { $set: { otpVerified: true } }
+          { $set: { verified: true } }
         );
 
         if (updated.modifiedCount === 1) {

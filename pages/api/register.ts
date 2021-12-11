@@ -95,7 +95,7 @@ export default async function register(
       });
       return;
     }
-    const { username, number, password } = req.body;
+    const { username, number, password } = req.body.data;
 
     if (!username || !number || !password) {
       res.status(400).json({
